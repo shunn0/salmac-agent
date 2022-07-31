@@ -2,14 +2,22 @@ package com.salmac.agent.entity;
 
 public class Message {
 
-    private String from;
-    private String text;
+    private String name;
+    private String message;
 
-    public String getText() {
-        return text;
+    public String getName() {
+        return name;
     }
 
-    public String getFrom() {
-        return from;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

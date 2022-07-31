@@ -1,4 +1,4 @@
-package com.salmac.agent.engine;
+package com.salmac.agent.engine.config;
 
 import com.salmac.agent.engine.service.ServerService;
 import com.salmac.agent.engine.utils.Constants;
@@ -13,6 +13,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.net.UnknownHostException;
@@ -34,6 +36,8 @@ public class Config {
     @Value("${server.port}")
     private String serverPort;
 
+    @Value("${salmac.host.self.name}")
+    private String selfName;
     @Scheduled(fixedRate = Constants.SERVER_STATUS_CHECK_INTERVAL)
     public void scheduleFixedRateTask() throws UnknownHostException {
         final String URI = salmacHost+"/server/heartbeat";
@@ -45,7 +49,10 @@ public class Config {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
-        map.add("targetEngineAddress", selfAddress);
+        map.add("agentIp", selfAddress);
+        map.add("agentPort", serverPort);
+        map.add("agentName", selfName);
+        map.add("agentOS", System.getProperty("os.name"));
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -60,5 +67,15 @@ public class Config {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**").allowCredentials(true).allowedOrigins("*").allowedMethods("*");
+            }
+        };
     }
 }
