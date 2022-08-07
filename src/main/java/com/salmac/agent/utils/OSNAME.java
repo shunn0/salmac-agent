@@ -1,4 +1,4 @@
-package com.salmac.agent.engine.utils;
+package com.salmac.agent.utils;
 
 public class OSNAME {
 	public static String OS = System.getProperty("os.name").toLowerCase();

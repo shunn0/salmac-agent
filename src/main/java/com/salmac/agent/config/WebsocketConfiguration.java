@@ -1,4 +1,4 @@
-package com.salmac.agent.engine.config;
+package com.salmac.agent.config;
 
 
 import org.springframework.context.annotation.Configuration;

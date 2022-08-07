@@ -1,6 +1,7 @@
-package com.salmac.agent.engine.utils;
+package com.salmac.agent.utils;
 
 import com.salmac.agent.entity.ScriptType;
+import com.salmac.agent.utils.OSNAME;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

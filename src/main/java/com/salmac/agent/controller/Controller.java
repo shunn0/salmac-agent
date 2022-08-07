@@ -1,11 +1,11 @@
-package com.salmac.agent.engine.controller;
+package com.salmac.agent.controller;
 
 import java.io.IOException;
 import java.util.List;
 
-import com.salmac.agent.engine.service.AgentService;
-import com.salmac.agent.engine.service.ProcessBuilderExecutor;
-import com.salmac.agent.engine.utils.Utils;
+import com.salmac.agent.service.AgentService;
+import com.salmac.agent.service.ProcessBuilderExecutor;
+import com.salmac.agent.utils.Utils;
 import com.salmac.agent.entity.ScriptDetailsDTO;
 import com.salmac.agent.entity.ScriptType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.salmac.agent.engine.files.FileStorageService;
+import com.salmac.agent.files.FileStorageService;
 
 @CrossOrigin(origins = "http://hostapp:8080")
 @RestController

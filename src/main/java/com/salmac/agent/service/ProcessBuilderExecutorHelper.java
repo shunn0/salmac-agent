@@ -1,6 +1,6 @@
-package com.salmac.agent.engine.service;
+package com.salmac.agent.service;
 
-import com.salmac.agent.engine.utils.OSNAME;
+import com.salmac.agent.utils.OSNAME;
 import com.salmac.agent.entity.OSType;
 import com.salmac.agent.entity.ScriptType;
 
@@ -8,7 +8,6 @@ import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 public class ProcessBuilderExecutorHelper {
 

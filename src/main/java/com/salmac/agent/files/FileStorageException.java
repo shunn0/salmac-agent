@@ -1,4 +1,4 @@
-package com.salmac.agent.engine.files;
+package com.salmac.agent.files;
 
 public class FileStorageException extends RuntimeException {
     public FileStorageException(String message) {

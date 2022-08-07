@@ -1,4 +1,4 @@
-package com.salmac.agent.engine.files;
+package com.salmac.agent.files;
 
 public class UploadFileResponse {
     private String fileName;

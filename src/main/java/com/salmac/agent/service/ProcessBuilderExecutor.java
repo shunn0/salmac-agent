@@ -1,4 +1,4 @@
-package com.salmac.agent.engine.service;
+package com.salmac.agent.service;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,14 +8,12 @@ import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.salmac.agent.engine.utils.Utils;
+import com.salmac.agent.utils.Utils;
 import com.salmac.agent.entity.OSType;
 import com.salmac.agent.entity.ScriptType;
 import org.springframework.stereotype.Component;
 
-import com.salmac.agent.engine.utils.OSNAME;
-
-import static com.salmac.agent.engine.service.ProcessBuilderExecutorHelper.*;
+import com.salmac.agent.utils.OSNAME;
 
 @Component
 public class ProcessBuilderExecutor {
@@ -49,7 +47,7 @@ public class ProcessBuilderExecutor {
             //System.out.println(cmds.trim());
             if(cmd.startsWith("cd ") || cmd.startsWith("CD ")){
                 List<String> resps = new ArrayList<>();
-                resps.add(handleCD(cmd));
+                resps.add(ProcessBuilderExecutorHelper.handleCD(cmd));
                 return resps;
             }
             return runMultipleCmd(cmd);
@@ -62,16 +60,16 @@ public class ProcessBuilderExecutor {
         String cmd = "";
         try {
             if (OSNAME.isUnix()) {
-                cmd = getScriptRunCommand(OSType.Linux, scriptType) + fileName;
+                cmd = ProcessBuilderExecutorHelper.getScriptRunCommand(OSType.Linux, scriptType) + fileName;
                 return runForUnix(cmd);
             } else if (OSNAME.isWindows()) {
-                cmd = getScriptRunCommand(OSType.Windows, scriptType) + fileName;
+                cmd = ProcessBuilderExecutorHelper.getScriptRunCommand(OSType.Windows, scriptType) + fileName;
                 return runForWindows(cmd);
             } else if (OSNAME.isMac()) {
-                cmd = getScriptRunCommand(OSType.Linux, scriptType) + fileName;
+                cmd = ProcessBuilderExecutorHelper.getScriptRunCommand(OSType.Linux, scriptType) + fileName;
                 return runForMac(cmd);
             } else if (OSNAME.isSolaris()) {
-                cmd = getScriptRunCommand(OSType.Linux, scriptType) + fileName;
+                cmd = ProcessBuilderExecutorHelper.getScriptRunCommand(OSType.Linux, scriptType) + fileName;
                 return runForSolaris(cmd);
             } else {
                 List<String> responseList = new ArrayList<String>();
@@ -88,7 +86,7 @@ public class ProcessBuilderExecutor {
     private List<String> runForUnix(String cmd){
         //System.out.println("Inside Linux runner");
     	ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.directory(new File(LINUX_DIRECTORY));
+        processBuilder.directory(new File(ProcessBuilderExecutorHelper.LINUX_DIRECTORY));
         //System.out.println("1");
     	processBuilder.command("bash", "-c", cmd);
         //System.out.println("2");

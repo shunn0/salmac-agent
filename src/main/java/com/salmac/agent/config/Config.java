@@ -1,7 +1,7 @@
-package com.salmac.agent.engine.config;
+package com.salmac.agent.config;
 
-import com.salmac.agent.engine.service.AgentService;
-import com.salmac.agent.engine.utils.Constants;
+import com.salmac.agent.service.AgentService;
+import com.salmac.agent.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
