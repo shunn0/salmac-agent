@@ -1,8 +1,13 @@
 package com.salmac.agent.engine.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.salmac.agent.engine.service.AgentService;
 import com.salmac.agent.engine.service.ProcessBuilderExecutor;
+import com.salmac.agent.engine.utils.Utils;
+import com.salmac.agent.entity.ScriptDetailsDTO;
+import com.salmac.agent.entity.ScriptType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +25,9 @@ public class Controller {
 
 	@Autowired
     ProcessBuilderExecutor executor;
+
+	@Autowired
+	AgentService agentService;
 
 	@Autowired
     private FileStorageService fileStorageService;
@@ -43,8 +51,17 @@ public class Controller {
 	}
 
 	@PostMapping("/runscript")
-    public List<String> uploadAndRunScript(@RequestParam MultipartFile file) {
+    public List<String> uploadAndRunScript(@RequestParam MultipartFile file, ScriptType scriptType) {
         String fileName = fileStorageService.storeFile(file);
-        return executor.runScript(fileName);
+		if(scriptType == null){
+			scriptType = Utils.assumeScriptType(fileName.trim());
+		}
+        return executor.runScript(fileName, scriptType);
     }
+
+	@PostMapping("/runserverscript")
+	public List<String> runServerScript(Long serverScriptId) throws IOException {
+		ScriptDetailsDTO dto = agentService.getServerFileName(serverScriptId);
+		return executor.runScript(dto.getContent(), dto.getScriptType());
+	}
 }

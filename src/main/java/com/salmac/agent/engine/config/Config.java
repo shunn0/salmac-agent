@@ -1,6 +1,6 @@
 package com.salmac.agent.engine.config;
 
-import com.salmac.agent.engine.service.ServerService;
+import com.salmac.agent.engine.service.AgentService;
 import com.salmac.agent.engine.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @EnableScheduling
 public class Config {
     @Autowired
-    ServerService serverService;
+    AgentService serverService;
 
     @Value("${salmac.host}")
     private String salmacHost;

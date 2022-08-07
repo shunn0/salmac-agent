@@ -1,5 +1,7 @@
 package com.salmac.agent.engine.utils;
 
+import com.salmac.agent.entity.ScriptType;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
@@ -18,5 +20,23 @@ public class Utils {
 
 	public static boolean isEmptyString(String string) {
 		return string == null || string.isEmpty();
+	}
+
+	public static ScriptType assumeScriptType(String fileName){
+		if(fileName.endsWith(".sh")){
+			return ScriptType.Shell;
+		} else if (fileName.endsWith(".py")) {
+			return ScriptType.Python;
+		} else if (fileName.endsWith(".bat")) {
+			return ScriptType.Batch;
+		} else if (fileName.endsWith(".cmd")) {
+			return ScriptType.Command;
+		}
+		//Handle default
+		if (OSNAME.isWindows()) {
+			return ScriptType.Batch;//By default Batch for Windows
+		} else {
+			return ScriptType.Shell;// By default, Script type is Shell for any other OS
+		}
 	}
 }

@@ -6,7 +6,11 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,6 +51,35 @@ public class FileStorageService {
             return targetLocation.toString();
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
+        }
+    }
+
+
+    public String storeFile(InputStream inputStream, String fileName) {
+
+        try {
+            // Check if the file's name contains invalid characters
+            if(fileName.contains("..")) {
+                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
+            }
+
+            // Copy file to the target location (Replacing existing file with the same name)
+            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            //System.out.println("targetLocation:  "+ targetLocation.toString());
+            Files.copy(inputStream, targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            return targetLocation.toString();
+        } catch (IOException ex) {
+            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
+        }
+    }
+
+    public String getFilePath(String fileName){
+        Path targetLocation = this.fileStorageLocation.resolve(fileName);
+        if(Files.exists(targetLocation)){
+            return targetLocation.toString();
+        }else {
+            return "";
         }
     }
 
