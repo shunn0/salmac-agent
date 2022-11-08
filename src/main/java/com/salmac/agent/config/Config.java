@@ -1,6 +1,7 @@
 package com.salmac.agent.config;
 
 import com.salmac.agent.service.AgentService;
+import com.salmac.agent.service.RestClient;
 import com.salmac.agent.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,43 +26,11 @@ import java.time.LocalDateTime;
 @EnableScheduling
 public class Config {
     @Autowired
-    AgentService serverService;
+    RestClient restClient;
 
-    @Value("${salmac.host}")
-    private String salmacHost;
-
-    @Value("${salmac.host.self}")
-    private String selfAddress;
-
-    @Value("${server.port}")
-    private String serverPort;
-
-    @Value("${salmac.host.self.name}")
-    private String selfName;
     @Scheduled(fixedRate = Constants.SERVER_STATUS_CHECK_INTERVAL)
     public void scheduleFixedRateTask() throws UnknownHostException {
-        final String URI = salmacHost+"/server/heartbeat";
-        //String ipAddr = Inet4Address.getLocalHost().getHostAddress()+":"+serverPort;
-        RestTemplate restTemplate = new RestTemplate();
-
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
-        map.add("agentIp", selfAddress);
-        map.add("agentPort", serverPort);
-        map.add("agentName", selfName);
-        map.add("agentOS", System.getProperty("os.name"));
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-
-        //ResponseEntity<String> response = restTemplate.pu( URI, request , String.class );
-        // HttpEntity<String> request = new HttpEntity<>(ipAddr+":"+serverPort);
-
-        ResponseEntity<String> response = restTemplate.postForEntity(URI, request, String.class);
-                //.exchange(URI, HttpMethod.POST, request,String.class);
-        System.out.println(LocalDateTime.now()+" : "+ response.getStatusCode());
+        restClient.sentHeartBeatRequest();
     }
 
     @Bean
@@ -69,13 +38,13 @@ public class Config {
         return builder.build();
     }
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowCredentials(true).allowedOrigins("*").allowedMethods("*");
-            }
-        };
-    }
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**").allowCredentials(true).allowedOrigins("*").allowedMethods("*");
+//            }
+//        };
+//    }
 }
